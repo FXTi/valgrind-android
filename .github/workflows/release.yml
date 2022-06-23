@@ -35,24 +35,24 @@ jobs:
       with:
         ndk-version: r21e
         add-to-path: false
-    - uses: shaowenchen/debugger-action@v2
-      name: debugger
-      timeout-minutes: 30
-      continue-on-error: true
-      with:
-        ngrok_token: ${{ secrets.NGROK_TOKEN }}
+    #- uses: shaowenchen/debugger-action@v2
+      #name: debugger
+      #timeout-minutes: 30
+      #continue-on-error: true
+      #with:
+        #ngrok_token: ${{ secrets.NGROK_TOKEN }}
     - name: build-arm64-v8a
       env:
         ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
       run: |
         cd valgrind-${{ env.VALGRIND_VERSION }}
 
-        export AR=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar
-        export LD=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ld
-        export CC=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+        export AR=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar
+        export LD=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ld
+        export CC=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
 
-        export CPPFLAGS="-O0 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
-        export CFLAGS="-O0 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+        export CPPFLAGS="-O0 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+        export CFLAGS="-O0 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
 
         ./configure --prefix=/data/local/tmp/valgrind --host=aarch64-unknown-linux --target=aarch64-unknown-linux --with-tmpdir=/data/local/tmp
         make -j2
