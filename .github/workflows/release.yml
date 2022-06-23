@@ -28,20 +28,20 @@ jobs:
         wget -q https://sourceware.org/pub/valgrind/valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         tar -xf valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         cd valgrind-${{ env.VALGRIND_VERSION }}
-        patch -p1 -i ../valgrind-3.16.1-ndk-r19-minimal_setjmp.patch
+        patch -p1 -i ../valgrind-3.16.1-ndaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldk-r19-minimal_setjmp.patch
         patch -p1 -i ../valgrind-3.16.1-fix-build-new-ndk.patch
-    - uses: shaowenchen/debugger-action@v2
-      name: debugger
-      timeout-minutes: 30
-      continue-on-error: true
-      with:
-        ngrok_token: ${{ secrets.NGROK_TOKEN }}
+    #- uses: shaowenchen/debugger-action@v2
+      #name: debugger
+      #timeout-minutes: 30
+      #continue-on-error: true
+      #with:
+        #ngrok_token: ${{ secrets.NGROK_TOKEN }}
     - name: build-arm64-v8a
       run: |
         cd valgrind-${{ env.VALGRIND_VERSION }}
 
-        export AR=$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar
-        export LD=$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ld
+        export AR=$ANDROID_HOME/ndk/21.4.7075529/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar
+        export LD=$ANDROID_HOME/ndk/21.4.7075529/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ld
         export CC=$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
 
         export CPPFLAGS="-O0 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
