@@ -28,7 +28,7 @@ jobs:
         wget -q https://sourceware.org/pub/valgrind/valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         tar -xf valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         cd valgrind-${{ env.VALGRIND_VERSION }}
-        patch -p1 -i ../valgrind-3.16.1-ndaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldaarch64-linux-android-ldk-r19-minimal_setjmp.patch
+        patch -p1 -i ../valgrind-3.16.1-ndk-r19-minimal_setjmp.patch
         patch -p1 -i ../valgrind-3.16.1-fix-build-new-ndk.patch
     #- uses: shaowenchen/debugger-action@v2
       #name: debugger
