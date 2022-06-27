@@ -19,8 +19,8 @@ jobs:
   android:
     runs-on: ubuntu-latest
     env:
-      VALGRIND_VERSION: 3.17.0
-      PACKAGENAME: valgrind-3.17.0-android
+      VALGRIND_VERSION: 3.18.1
+      PACKAGENAME: valgrind-3.18.1-android
     steps:
     - uses: actions/checkout@v2
     - name: valgrind-source
@@ -50,6 +50,7 @@ jobs:
         export CPPFLAGS="-O3 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
         export CFLAGS="-O3 --target=aarch64-none-linux-android21 --gcc-toolchain=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64 --sysroot=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
 
+        autoreconf -fi
         ./configure --prefix=/data/local/tmp/valgrind --host=aarch64-unknown-linux --target=aarch64-unknown-linux --with-tmpdir=/data/local/tmp
         make -j2
         make install DESTDIR=`pwd`/install
