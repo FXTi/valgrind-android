@@ -29,6 +29,9 @@ jobs:
         tar -xf valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         cd valgrind-${{ env.VALGRIND_VERSION }}
         patch -p1 -i ../valgrind-3.16.1-fix-build-new-ndk.patch
+        cp ../aarch64-setjmp.S ./
+        patch -p1 -i ../coregrindmake.am.diff
+        patch -p1 -i ../memcheckmake.am.diff
     - uses: nttld/setup-ndk@v1
       id: setup-ndk
       with:
