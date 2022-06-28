@@ -29,6 +29,7 @@ jobs:
         tar -xf valgrind-${{ env.VALGRIND_VERSION }}.tar.bz2
         cd valgrind-${{ env.VALGRIND_VERSION }}
         patch -p1 -i ../valgrind-3.16.1-fix-build-new-ndk.patch
+        patch -p1 -i ../valgrind-3.16.1-ndk-r19-minimal_setjmp.patch
     - uses: nttld/setup-ndk@v1
       id: setup-ndk
       with:

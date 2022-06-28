@@ -40,28 +40,24 @@ index 681450cef..ccdf295df 100644
 +// set, so we are dealing with 'x' registers.
 +
 +
-+#define VG_MINIMAL_JMP_BUF(_name)        UWord _name [13]
++#define VG_MINIMAL_JMP_BUF(_name)        UWord _name [32]
 +
 +__attribute__((returns_twice))
 +inline UWord VG_MINIMAL_SETJMP(VG_MINIMAL_JMP_BUF(_env))
 +{
 +   asm volatile(
-+     // x9 is the first of the regular temporary registers
-+     // per the above-mentioned Procedule Call Standard document.
-+     // Use it as temporary to hold the value of SP, since str does
-+     // not accept SP as operand.
-+     "  mov x9, sp                     \n"
-+     // Store the general-purpose registers that we need to save
-+     // per the above discussion.
-+     // Note that x30 is the link register.
-+     "  stp x19, x20, [%[_env], 0]     \n"
-+     "  stp x21, x22, [%[_env], 0x10]  \n"
-+     "  stp x23, x24, [%[_env], 0x20]  \n"
-+     "  stp x25, x26, [%[_env], 0x30]  \n"
-+     "  stp x27, x28, [%[_env], 0x40]  \n"
-+     "  stp x29, x30, [%[_env], 0x50]  \n"
-+     // Store the value of SP.
-+     "  str x9,       [%[_env], 0x60]  \n"
++     "  mov x10, sp                    \n"
++     "  stp x30, x10, [%[_env], 0x10]  \n"
++     "  stp x28, x29, [%[_env], 0x20]  \n"
++     "  stp x26, x27, [%[_env], 0x30]  \n"
++     "  stp x24, x25, [%[_env], 0x40]  \n"
++     "  stp x22, x23, [%[_env], 0x50]  \n"
++     "  stp x20, x21, [%[_env], 0x60]  \n"
++     "  str x19,      [%[_env], 0x70]  \n"
++     "  stp d14, d15, [%[_env], 0x78]  \n"
++     "  stp d12, d13, [%[_env], 0x88]  \n"
++     "  stp d10, d11, [%[_env], 0x98]  \n"
++     "  stp d8,  d9,  [%[_env], 0xa8]  \n"
 +     :
 +     // No outputs
 +     :
@@ -70,7 +66,7 @@ index 681450cef..ccdf295df 100644
 +     :
 +     // Clobbers.
 +     // We have used x9 as a temporary
-+     "x9",
++     "x10",
 +     // We have written to memory locations
 +     "memory");
 +
@@ -85,14 +81,18 @@ index 681450cef..ccdf295df 100644
 +{
 +   asm volatile(
 +     // Loads to match the stores in the above setjmp implementation.
-+     "  ldp x19, x20, [%[_env], 0]     \n"
-+     "  ldp x21, x22, [%[_env], 0x10]  \n"
-+     "  ldp x23, x24, [%[_env], 0x20]  \n"
-+     "  ldp x25, x26, [%[_env], 0x30]  \n"
-+     "  ldp x27, x28, [%[_env], 0x40]  \n"
-+     "  ldp x29, x30, [%[_env], 0x50]  \n"
-+     "  ldr x9,       [%[_env], 0x60]  \n"
-+     "  mov sp, x9                     \n"
++     "  ldp x30, x10, [%[_env], 0x10]  \n"
++     "  ldp x28, x29, [%[_env], 0x20]  \n"
++     "  ldp x26, x27, [%[_env], 0x30]  \n"
++     "  ldp x24, x25, [%[_env], 0x40]  \n"
++     "  ldp x22, x23, [%[_env], 0x50]  \n"
++     "  ldp x20, x21, [%[_env], 0x60]  \n"
++     "  ldr x19,      [%[_env], 0x70]  \n"
++     "  mov sp, x10                    \n"
++     "  ldp d14, d15, [%[_env], 0x78]  \n"
++     "  ldp d12, d13, [%[_env], 0x88]  \n"
++     "  ldp d10, d11, [%[_env], 0x98]  \n"
++     "  ldp d8,  d9,  [%[_env], 0xa8]  \n"
 +     // return as setjmp for the second time, returning 1.
 +     // Since we have loaded the link register x30 from the saved buffer
 +     // that was set by the above setjmp implementation, the 'ret' instruction
@@ -110,7 +110,7 @@ index 681450cef..ccdf295df 100644
 +     :
 +     // Clobbers.
 +     // We have used x9 as a temporary
-+     "x9");
++     "x10");
 +
 +  // This statement is unreachable because the above asm statement
 +  // unconditionally does a 'ret' instruction. The purpose of this
